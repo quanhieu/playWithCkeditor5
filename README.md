@@ -1,34 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Play with Ckeditor5 (Without build-in your source)
 
-## Getting Started
+## Feature
+- Rich text editor
+  - Preview editor content
+- Upload images/file as Base64
+  - Preview image
+- Parse HTML into react app
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
+## Environment suggestion
+```
+  next
+  @ckeditor/ckeditor5-react
+  styled-components
+  html-react-parser
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Start
+1. Customize and build your CKEditor 5
+[here](https://ckeditor.com/ckeditor-5/online-builder/)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+2. Download .zip
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+3. Install
+```bash
+yarn
+# or
+npm install
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+4. Build it (For me, I rename folder build as "custom-build-ckeditor")
+```bash
+yarn build
+# or
+npm run build
+```
 
-## Learn More
+5. Copy build folder to your source
 
-To learn more about Next.js, take a look at the following resources:
+6. Import
+```bash
+  With NEXTJS as:
+  import dynamic from 'next/dynamic'
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  const EditorCustom = dynamic(() => import('./ckeditor5'), {
+    ssr: false,
+  })
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+7. Use in your component
+```bash
+  <EditorCustom/>
+```
 
-## Deploy on Vercel
+8. Update toolbar
+```bash
+  config={{
+    placeholder: '.',
+    removePlugins: ['Markdown'],
+    toolbar: fatherToolbar,
+    image: imageToolbar,
+    table: tableToolbar,
+  }}
+```
+Config values is in ``
+  config.js
+``
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Note
+``
+  I think you should to make your own a cup of coffee.
+  Because of in the first time start your source, which is include custom-editor. You will be waiting for longggggggg time.
+``
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## If want to play with build-in source
+Here is my repo
+
+[Ckeditor4](https://github.com/quanhieu/richText/tree/main/ckeditor4)
+
+[Ckeditor5](https://github.com/quanhieu/richText/tree/main/ckeditor5-custom-nextjs)
