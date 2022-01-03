@@ -12,7 +12,9 @@
   next
   @ckeditor/ckeditor5-react
   styled-components
+  @styled-jsx/plugin-sass
   html-react-parser
+  react-hook-form
 ```
 
 ## Start

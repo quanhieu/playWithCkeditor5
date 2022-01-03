@@ -19,8 +19,10 @@
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
+    "@styled-jsx/plugin-sass": "^4.0.2",
     "babel-plugin-styled-components": "^2.0.2",
     "eslint": "8.5.0",
-    "eslint-config-next": "12.0.7"
+    "eslint-config-next": "12.0.7",
+    "sass": "^1.45.1"
   }
 }

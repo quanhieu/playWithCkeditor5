@@ -11,6 +11,7 @@ const EditorCustom = dynamic(() => import('./ckeditor5'), {
 const WrapEditorComponent = ({ data = '', onDone, isError }) => {
   const componentRef = useRef('')
   const wrapComponentRef = useRef(null)
+  const editorValue = useRef(null)
   const [editorError, setEditorError] = useState(false)
   const [filledContent, setFilledContent] = useState('')
   const [parseHtml, setParseHtml] = useState('')
@@ -35,10 +36,16 @@ const WrapEditorComponent = ({ data = '', onDone, isError }) => {
         display: none;
       }
       .media {
+        // display: flex;
+        // justify-content: center;
         display: block;
         margin-left: auto;
         margin-right: auto;
         width: 50%;
+      }
+      iframe {
+        width: 90%;
+        height: 36vh;
       }
       .image {
         display: block;
@@ -75,6 +82,27 @@ const WrapEditorComponent = ({ data = '', onDone, isError }) => {
     return mimicContent
   }, [])
 
+  const transformIframe = useCallback(() => {
+    if (editorValue.current) {
+      const firstStep = editorValue.current.replaceAll(
+        '<oembed url',
+        '<oembed src'
+      )
+      let secondStep = firstStep.replaceAll('oembed', 'iframe')
+      if (secondStep.includes('youtube.com/watch')) {
+        secondStep = secondStep.replaceAll(
+          'youtube.com/watch?v=',
+          'youtube.com/embed/'
+        )
+      }
+      return secondStep.replaceAll(
+        '<iframe',
+        '<iframe frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen'
+      )
+    }
+    return ''
+  }, [])
+
   const clearStyle = useCallback(
     val => val.replace(/(<style[\w\W]+style>)/g, ''),
     []
@@ -84,6 +112,7 @@ const WrapEditorComponent = ({ data = '', onDone, isError }) => {
     const isNotEmpty = clearStyle(val)
     if (isNotEmpty) {
       onDone(val)
+      editorValue.current = val
       return val
     }
     onDone(isNotEmpty)
@@ -180,6 +209,14 @@ const WrapEditorComponent = ({ data = '', onDone, isError }) => {
             >
               <b>Preview Your Content</b>
             </Button>
+            <Button
+              className="btn btn-danger"
+              onClick={() => {
+                asPreview(transformIframe())
+              }}
+            >
+              <b>Preview As Editor Value</b>
+            </Button>
             <Button 
               className="btn btn-success"
               onClick={() => handleParseHtml()}
@@ -192,15 +229,35 @@ const WrapEditorComponent = ({ data = '', onDone, isError }) => {
 
       <div>
         <hr/>
-        {
+        {/* {
           parseHtml && <div>
             <h2 style={{ textAlign: 'center', display: 'block' }}>It show time</h2>
             <div style={{ border: '1px solid #c4c4c4' }}>
               {parseHtml}
             </div>
           </div>
+        } */}
+        {
+          parseHtml && <div className='parser-html-container'>
+            <h2>It show time</h2>
+            <div className='parser-html'>
+              {parseHtml}
+            </div>
+          </div>
         }
-        
+        <style jsx>
+          {`
+            .parser-html-container {
+              h2 {
+                text-align: center;
+                display: block;
+              }
+              .parser-html {
+                border: 1px solid red;
+              }
+            }
+          `}
+        </style>
       </div>
     </StyledWrapEditor>
   )
